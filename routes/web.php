@@ -21,5 +21,5 @@ Route::get('/josh', function() {
 });
 
 Route::get('/test', function() {
-    return 'Foo';
+    //return view('foo')';
 });
