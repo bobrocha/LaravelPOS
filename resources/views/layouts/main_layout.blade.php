@@ -13,9 +13,9 @@
 		<div id="app">
 			@yield('app')
 		</div>
-		<div>
-			@yield('content')
-		</div>
+		<!-- start of content-->
+		<div>@yield('content')</div>
+		<!-- end of content-->
 	</div>
 
 	<script src="{!! asset('js/app.js') !!}"></script>

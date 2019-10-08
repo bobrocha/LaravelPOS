@@ -1,0 +1,156 @@
+<template>
+	<section class="table-container">
+		<header>
+			<h1>Add Category</h1>
+			<button class="btn btn-success">Save</button>
+		</header>
+		<div class="animation-wrapper" ref="error_msg">
+			<div class="alert alert-danger error" role="alert" v-if="error">
+				{{ error }}
+			</div>
+		</div>
+		<table class="table table-bordered table-sm">
+			<thead>
+				<tr>
+					<th scope="col"></th>
+					<th scope="col">Title</th>
+					<th scope="col"></th>
+				</tr>
+				<tr>
+					<th scope="col"></th>
+					<th scope="col" class="edit-col"><input type="text" name="title" v-model.trim="title" @keyup.enter="addRow"></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(row, index) in rows" :key="row.id">
+					<td class="delete-col"><button type="button" class="btn btn-danger" @click="deleteRow(index)">Delete</button></td>
+					<td class="added-item">{{ row.title }}</td>
+					<td><button type="button" class="btn btn-secondary">Edit</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+</template>
+
+<script>
+export default {
+	name: 'add-category',
+	data() {
+		return {
+			title     : null,
+			submitted : false,
+			rows      : [],
+			error     : null,
+		}
+	},
+	methods : {
+		submit() {
+			// this.$refs.error_msg.classList.add('animation-wrapper');
+			// this.$refs.error_msg.classList.remove('fade-in');
+
+			// if(!this.title) {
+			// 	this.error = 'You must enter a category.';
+				
+			// 	this.$refs.error_msg.classList.remove('animation-wrapper');
+			// 	this.$refs.error_msg.classList.add('fade-in');
+
+			// 	return;
+			// }
+
+			// this.submitted = true;
+			
+			// if(this.title) {
+			// 	this.addRow(this.title);
+			// }
+		},
+		addRow(title) {
+			this.$refs.error_msg.classList.add('animation-wrapper');
+			this.$refs.error_msg.classList.remove('fade-in');
+
+			if(!this.title) {
+				this.error = 'You must enter a category.';
+				
+				this.$refs.error_msg.classList.remove('animation-wrapper');
+				this.$refs.error_msg.classList.add('fade-in');
+
+				return;
+			}
+
+			this.rows.unshift({
+				id    : this.rows.length + 1,
+				title : this.title,
+			});
+
+			this.title = null;
+		},
+		deleteRow(index) {
+			this.rows.splice(index, 1);
+		}
+	}
+}
+</script>
+
+<style>
+input {
+	width : 100%;
+}
+
+thead {
+	text-align: center;
+}
+
+.error {
+	text-align: center;
+}
+
+.fade-in {
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 1s;
+
+}
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.animation-wrapper {
+	opacity: 0;
+}
+
+.table-container {
+	width: 600px;
+	margin : 1em auto;
+}
+
+.table-container table {
+	box-shadow: 0 0 5px 1px #ccc;
+}
+
+.table-container header {
+	text-align: center;
+	margin: 1em  0;
+	padding: 1em;
+	box-shadow: 0 0 5px 1px #ccc;
+}
+
+.table-container .added-item {
+	text-align: center;
+	vertical-align: middle;
+}
+
+thead tr th:first-child,
+thead tr th:last-child,
+tbody tr td:first-child,
+tbody tr td:last-child {
+	width : 80px;
+	text-align: center;
+}
+</style>
