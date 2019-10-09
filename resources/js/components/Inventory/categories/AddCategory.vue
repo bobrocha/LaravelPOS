@@ -2,9 +2,9 @@
 	<section class="table-container">
 		<header>
 			<h1>Add Category</h1>
-			<button class="btn btn-success">Save</button>
+			<button class="btn btn-success" @click="save" :disabled="disable_save">Save</button>
 		</header>
-		<div class="animation-wrapper" ref="error_msg">
+		<div class="animation-wrapper" ref="error_msg" >
 			<div class="alert alert-danger error" role="alert" v-if="error">
 				{{ error }}
 			</div>
@@ -38,35 +38,18 @@ export default {
 	name: 'add-category',
 	data() {
 		return {
-			title     : null,
-			submitted : false,
-			rows      : [],
-			error     : null,
+			title        : null,
+			submitted    : false,
+			rows         : [],
+			error        : null,
+			disable_save : false,
 		}
 	},
 	methods : {
-		submit() {
-			// this.$refs.error_msg.classList.add('animation-wrapper');
-			// this.$refs.error_msg.classList.remove('fade-in');
-
-			// if(!this.title) {
-			// 	this.error = 'You must enter a category.';
-				
-			// 	this.$refs.error_msg.classList.remove('animation-wrapper');
-			// 	this.$refs.error_msg.classList.add('fade-in');
-
-			// 	return;
-			// }
-
-			// this.submitted = true;
-			
-			// if(this.title) {
-			// 	this.addRow(this.title);
-			// }
-		},
-		addRow(title) {
+		addRow(title = null) {
 			this.$refs.error_msg.classList.add('animation-wrapper');
 			this.$refs.error_msg.classList.remove('fade-in');
+			this.error = null;
 
 			if(!this.title) {
 				this.error = 'You must enter a category.';
@@ -77,6 +60,8 @@ export default {
 				return;
 			}
 
+			this.disable_save = false;
+
 			this.rows.unshift({
 				id    : this.rows.length + 1,
 				title : this.title,
@@ -84,10 +69,21 @@ export default {
 
 			this.title = null;
 		},
-		deleteRow(index) {
+		deleteRow(index = null) {
 			this.rows.splice(index, 1);
-		}
-	}
+		},
+		save() {console.log('foo');
+			axios.post('/inventory/categories/add', {
+				...this.rows,
+			});
+		},
+	},
+	mounted() {
+		// Disable save as there are no rows
+		this.disable_save = this.rows.length === 0;
+	},
+	computed : {
+	},
 }
 </script>
 
@@ -123,6 +119,7 @@ thead {
 
 .animation-wrapper {
 	opacity: 0;
+	display: none;
 }
 
 .table-container {

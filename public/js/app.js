@@ -1838,6 +1838,12 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -1880,26 +1886,16 @@ __webpack_require__.r(__webpack_exports__);
       title: null,
       submitted: false,
       rows: [],
-      error: null
+      error: null,
+      disable_save: false
     };
   },
   methods: {
-    submit: function submit() {// this.$refs.error_msg.classList.add('animation-wrapper');
-      // this.$refs.error_msg.classList.remove('fade-in');
-      // if(!this.title) {
-      // 	this.error = 'You must enter a category.';
-      // 	this.$refs.error_msg.classList.remove('animation-wrapper');
-      // 	this.$refs.error_msg.classList.add('fade-in');
-      // 	return;
-      // }
-      // this.submitted = true;
-      // if(this.title) {
-      // 	this.addRow(this.title);
-      // }
-    },
-    addRow: function addRow(title) {
+    addRow: function addRow() {
+      var title = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       this.$refs.error_msg.classList.add('animation-wrapper');
       this.$refs.error_msg.classList.remove('fade-in');
+      this.error = null;
 
       if (!this.title) {
         this.error = 'You must enter a category.';
@@ -1908,16 +1904,27 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+      this.disable_save = false;
       this.rows.unshift({
         id: this.rows.length + 1,
         title: this.title
       });
       this.title = null;
     },
-    deleteRow: function deleteRow(index) {
+    deleteRow: function deleteRow() {
+      var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       this.rows.splice(index, 1);
+    },
+    save: function save() {
+      console.log('foo');
+      axios.post('/inventory/categories/add', _objectSpread({}, this.rows));
     }
-  }
+  },
+  mounted: function mounted() {
+    // Disable save as there are no rows
+    this.disable_save = this.rows.length === 0;
+  },
+  computed: {}
 });
 
 /***/ }),
@@ -6422,7 +6429,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\ninput {\n\twidth : 100%;\n}\nthead {\n\ttext-align: center;\n}\n.error {\n\ttext-align: center;\n}\n.fade-in {\n\topacity: 1;\n\t-webkit-animation-name: fadeInOpacity;\n\t        animation-name: fadeInOpacity;\n\t-webkit-animation-iteration-count: 1;\n\t        animation-iteration-count: 1;\n\t-webkit-animation-timing-function: ease-in;\n\t        animation-timing-function: ease-in;\n\t-webkit-animation-duration: 1s;\n\t        animation-duration: 1s;\n}\n@-webkit-keyframes fadeInOpacity {\n0% {\n\t\topacity: 0;\n}\n100% {\n\t\topacity: 1;\n}\n}\n@keyframes fadeInOpacity {\n0% {\n\t\topacity: 0;\n}\n100% {\n\t\topacity: 1;\n}\n}\n.animation-wrapper {\n\topacity: 0;\n}\n.table-container {\n\twidth: 600px;\n\tmargin : 1em auto;\n}\n.table-container table {\n\tbox-shadow: 0 0 5px 1px #ccc;\n}\n.table-container header {\n\ttext-align: center;\n\tmargin: 1em  0;\n\tpadding: 1em;\n\tbox-shadow: 0 0 5px 1px #ccc;\n}\n.table-container .added-item {\n\ttext-align: center;\n\tvertical-align: middle;\n}\nthead tr th:first-child,\nthead tr th:last-child,\ntbody tr td:first-child,\ntbody tr td:last-child {\n\twidth : 80px;\n\ttext-align: center;\n}\n", ""]);
+exports.push([module.i, "\ninput {\n\twidth : 100%;\n}\nthead {\n\ttext-align: center;\n}\n.error {\n\ttext-align: center;\n}\n.fade-in {\n\topacity: 1;\n\t-webkit-animation-name: fadeInOpacity;\n\t        animation-name: fadeInOpacity;\n\t-webkit-animation-iteration-count: 1;\n\t        animation-iteration-count: 1;\n\t-webkit-animation-timing-function: ease-in;\n\t        animation-timing-function: ease-in;\n\t-webkit-animation-duration: 1s;\n\t        animation-duration: 1s;\n}\n@-webkit-keyframes fadeInOpacity {\n0% {\n\t\topacity: 0;\n}\n100% {\n\t\topacity: 1;\n}\n}\n@keyframes fadeInOpacity {\n0% {\n\t\topacity: 0;\n}\n100% {\n\t\topacity: 1;\n}\n}\n.animation-wrapper {\n\topacity: 0;\n\tdisplay: none;\n}\n.table-container {\n\twidth: 600px;\n\tmargin : 1em auto;\n}\n.table-container table {\n\tbox-shadow: 0 0 5px 1px #ccc;\n}\n.table-container header {\n\ttext-align: center;\n\tmargin: 1em  0;\n\tpadding: 1em;\n\tbox-shadow: 0 0 5px 1px #ccc;\n}\n.table-container .added-item {\n\ttext-align: center;\n\tvertical-align: middle;\n}\nthead tr th:first-child,\nthead tr th:last-child,\ntbody tr td:first-child,\ntbody tr td:last-child {\n\twidth : 80px;\n\ttext-align: center;\n}\n", ""]);
 
 // exports
 
@@ -37905,7 +37912,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("section", { staticClass: "table-container" }, [
-    _vm._m(0),
+    _c("header", [
+      _c("h1", [_vm._v("Add Category")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-success",
+          attrs: { disabled: _vm.disable_save },
+          on: { click: _vm.save }
+        },
+        [_vm._v("Save")]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { ref: "error_msg", staticClass: "animation-wrapper" }, [
       _vm.error
@@ -37922,7 +37941,7 @@ var render = function() {
     _vm._v(" "),
     _c("table", { staticClass: "table table-bordered table-sm" }, [
       _c("thead", [
-        _vm._m(1),
+        _vm._m(0),
         _vm._v(" "),
         _c("tr", [
           _c("th", { attrs: { scope: "col" } }),
@@ -37991,7 +38010,7 @@ var render = function() {
               _vm._v(_vm._s(row.title))
             ]),
             _vm._v(" "),
-            _vm._m(2, true)
+            _vm._m(1, true)
           ])
         }),
         0
@@ -38000,16 +38019,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("header", [
-      _c("h1", [_vm._v("Add Category")]),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-success" }, [_vm._v("Save")])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
