@@ -1916,13 +1916,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.rows.splice(index, 1);
     },
     save: function save() {
-      console.log('foo');
-      axios.post('/inventory/categories/add', _objectSpread({}, this.rows));
+      axios.post(action_url, _objectSpread({}, this.rows));
     }
   },
   mounted: function mounted() {
     // Disable save as there are no rows
     this.disable_save = this.rows.length === 0;
+    console.log(action_url);
   },
   computed: {}
 });
@@ -50273,7 +50273,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Inventory_categories_AddCategory_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Inventory/categories/AddCategory.vue */ "./resources/js/components/Inventory/categories/AddCategory.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"); //console.log(action_url);
+
 
 
 var app = new Vue({

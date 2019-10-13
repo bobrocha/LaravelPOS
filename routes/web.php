@@ -29,6 +29,7 @@ Route::get('/test', function() {
 // Inventory > Categories
 Route::get('/categories', 'Inventory\Categories\CategoriesController@index');
 Route::get('inventory/categories/add', 'Inventory\Categories\CategoriesController@add');
+Route::post('inventory/categories/create', 'Inventory\Categories\CategoriesController@create');
 
 Route::get('/foo', 'inventory\FooController@index');
 Route::get('/bar', 'BarController@index');

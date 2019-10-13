@@ -14,4 +14,9 @@ class CategoriesController extends Controller
 	public function add() {
 		return view('categories.add_category');
 	}
+
+	public function create() {
+		return 'foo';
+	}
+	//https://guidelines.spatie.be/code-style/laravel-php#controllers
 }

@@ -72,15 +72,15 @@ export default {
 		deleteRow(index = null) {
 			this.rows.splice(index, 1);
 		},
-		save() {console.log('foo');
-			axios.post('/inventory/categories/add', {
+		save() {
+			axios.post(action_url, {
 				...this.rows,
 			});
 		},
 	},
 	mounted() {
 		// Disable save as there are no rows
-		this.disable_save = this.rows.length === 0;
+		this.disable_save = this.rows.length === 0;console.log(action_url);
 	},
 	computed : {
 	},

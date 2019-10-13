@@ -10,14 +10,15 @@
 </head>
 <body>
 	<div class="container">
-		<div id="app">
-			@yield('app')
-		</div>
+		<!-- start of app-->
+		<div id="app">@yield('app')</div>
+		<!-- end of app-->
+
 		<!-- start of content-->
 		<div>@yield('content')</div>
 		<!-- end of content-->
 	</div>
-
+	@yield('scripts')
 	<script src="{!! asset('js/app.js') !!}"></script>
 </body>
 </html>
