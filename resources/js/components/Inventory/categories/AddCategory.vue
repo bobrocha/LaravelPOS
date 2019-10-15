@@ -92,11 +92,10 @@ export default {
 				this.disable_save  = false;
 				this.disable_input = false;
 
-				console.log('received response');
-				console.log(response);
+				
 			})
 			.catch((error) => {
-				console.log(`This is the error ${error}`);
+				
 			});
 		},
 	},
@@ -165,10 +164,10 @@ thead {
 	vertical-align: middle;
 }
 
-thead tr th:first-child,
-thead tr th:last-child,
-tbody tr td:first-child,
-tbody tr td:last-child {
+.table-container thead tr th:first-child,
+.table-container thead tr th:last-child,
+.table-container tbody tr td:first-child,
+.table-container tbody tr td:last-child {
 	width : 80px;
 	text-align: center;
 }
