@@ -1887,7 +1887,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       submitted: false,
       rows: [],
       error: null,
-      disable_save: false
+      disable_save: false,
+      disable_input: false
     };
   },
   methods: {
@@ -1916,13 +1917,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.rows.splice(index, 1);
     },
     save: function save() {
-      axios.post(action_url, _objectSpread({}, this.rows));
+      var _this = this;
+
+      // Clean up data before sending it to server
+      this.rows.forEach(function (row) {
+        delete row.id;
+      });
+      this.disable_save = true;
+      this.disable_input = true;
+      axios.post(action_url, {
+        rows: _objectSpread({}, this.rows)
+      }).then(function (response) {
+        _this.rows = [];
+        _this.disable_save = false;
+        _this.disable_input = false;
+        console.log('received response');
+        console.log(response);
+      })["catch"](function (error) {
+        console.log("This is the error ".concat(error));
+      });
     }
   },
   mounted: function mounted() {
     // Disable save as there are no rows
     this.disable_save = this.rows.length === 0;
-    console.log(action_url);
   },
   computed: {}
 });
@@ -37957,7 +37975,11 @@ var render = function() {
                   modifiers: { trim: true }
                 }
               ],
-              attrs: { type: "text", name: "title" },
+              attrs: {
+                type: "text",
+                name: "title",
+                disabled: _vm.disable_input
+              },
               domProps: { value: _vm.title },
               on: {
                 keyup: function($event) {
@@ -37995,7 +38017,7 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-danger",
-                  attrs: { type: "button" },
+                  attrs: { type: "button", disabled: _vm.disable_input },
                   on: {
                     click: function($event) {
                       return _vm.deleteRow(index)
@@ -38010,7 +38032,16 @@ var render = function() {
               _vm._v(_vm._s(row.title))
             ]),
             _vm._v(" "),
-            _vm._m(1, true)
+            _c("td", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { type: "button", disabled: _vm.disable_input }
+                },
+                [_vm._v("Edit")]
+              )
+            ])
           ])
         }),
         0
@@ -38029,18 +38060,6 @@ var staticRenderFns = [
       _c("th", { attrs: { scope: "col" } }, [_vm._v("Title")]),
       _vm._v(" "),
       _c("th", { attrs: { scope: "col" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c(
-        "button",
-        { staticClass: "btn btn-secondary", attrs: { type: "button" } },
-        [_vm._v("Edit")]
-      )
     ])
   }
 ]

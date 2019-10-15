@@ -18,15 +18,15 @@
 				</tr>
 				<tr>
 					<th scope="col"></th>
-					<th scope="col" class="edit-col"><input type="text" name="title" v-model.trim="title" @keyup.enter="addRow"></th>
+					<th scope="col" class="edit-col"><input type="text" name="title" v-model.trim="title" @keyup.enter="addRow" :disabled="disable_input"></th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr v-for="(row, index) in rows" :key="row.id">
-					<td class="delete-col"><button type="button" class="btn btn-danger" @click="deleteRow(index)">Delete</button></td>
+					<td class="delete-col"><button type="button" class="btn btn-danger" @click="deleteRow(index)" :disabled="disable_input">Delete</button></td>
 					<td class="added-item">{{ row.title }}</td>
-					<td><button type="button" class="btn btn-secondary">Edit</button></td>
+					<td><button type="button" class="btn btn-secondary" :disabled="disable_input">Edit</button></td>
 				</tr>
 			</tbody>
 		</table>
@@ -38,11 +38,12 @@ export default {
 	name: 'add-category',
 	data() {
 		return {
-			title        : null,
-			submitted    : false,
-			rows         : [],
-			error        : null,
-			disable_save : false,
+			title         : null,
+			submitted     : false,
+			rows          : [],
+			error         : null,
+			disable_save  : false,
+			disable_input : false,
 		}
 	},
 	methods : {
@@ -73,14 +74,35 @@ export default {
 			this.rows.splice(index, 1);
 		},
 		save() {
+			// Clean up data before sending it to server
+			this.rows.forEach(row => {
+				delete row.id;
+			});
+
+			this.disable_save = true;
+			this.disable_input = true;
+
 			axios.post(action_url, {
-				...this.rows,
+				rows :{
+					...this.rows,
+				}
+			})
+			.then((response) => {
+				this.rows          = [];
+				this.disable_save  = false;
+				this.disable_input = false;
+
+				console.log('received response');
+				console.log(response);
+			})
+			.catch((error) => {
+				console.log(`This is the error ${error}`);
 			});
 		},
 	},
 	mounted() {
 		// Disable save as there are no rows
-		this.disable_save = this.rows.length === 0;console.log(action_url);
+		this.disable_save = this.rows.length === 0;
 	},
 	computed : {
 	},
