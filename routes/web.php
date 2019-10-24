@@ -25,9 +25,6 @@ Route::post('inventory/categories/create/{title}', 'Inventory\Categories\Categor
 Route::post('inventory/categories/destroy/{category}', 'Inventory\Categories\CategoriesController@destroy')->name('inventory_categories_destroy');
 Route::post('inventory/categories/update/{id}/{title}', 'Inventory\Categories\CategoriesController@update');
 
-Route::get('/foo', 'inventory\FooController@index');
-Route::get('/bar', 'BarController@index');
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
