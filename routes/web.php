@@ -18,18 +18,12 @@ Route::get('/', function () {
 
 Route::get('/josh', 'RegisterController@validate');
 
-Route::get('/test', function() {
-	return 'foo';
-});
-
-// Inventory > Items
-// Route::get('/products', 'Inventory\Products\ProductsController@index');
-// Route::get('/products/add', 'Inventory\Products\ProductsController@add');
-
 // Inventory > Categories
-Route::get('/categories', 'Inventory\Categories\CategoriesController@index');
-Route::get('inventory/categories/add', 'Inventory\Categories\CategoriesController@add');
-Route::post('inventory/categories/create', 'Inventory\Categories\CategoriesController@create');
+Route::get('inventory/categories', 'Inventory\Categories\CategoriesController@index')->name('inventory_categories');
+Route::get('inventory/categories/get', 'Inventory\Categories\CategoriesController@getAll');
+Route::post('inventory/categories/create/{title}', 'Inventory\Categories\CategoriesController@create')->name('inventory_categories_store');
+Route::post('inventory/categories/destroy/{category}', 'Inventory\Categories\CategoriesController@destroy')->name('inventory_categories_destroy');
+Route::post('inventory/categories/update/{id}/{title}', 'Inventory\Categories\CategoriesController@update');
 
 Route::get('/foo', 'inventory\FooController@index');
 Route::get('/bar', 'BarController@index');
